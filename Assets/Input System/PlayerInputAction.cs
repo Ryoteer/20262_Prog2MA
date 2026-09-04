@@ -109,6 +109,42 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Melee Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e97d6512-b3bc-4ab1-a98a-a49208098610"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Range Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e7bfc3e8-a32f-4c40-8964-9646a57ab25e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Area Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""5fd3f1ee-9f05-4646-b36c-35ad65a39f82"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Suicide"",
+                    ""type"": ""Button"",
+                    ""id"": ""ad7dbcfe-ff46-4cde-9a7e-99d2d5e6330f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +268,50 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13505163-40cd-4ec4-be6a-fa75006a8d74"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Melee Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff9ae50a-74da-4ac7-ab19-46b3e3f5cd8f"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Suicide"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96138ce1-a994-4cae-9263-593db5154022"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Range Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ca64d52-8f38-43fe-bfd9-d6bb7cd168d6"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Area Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -242,6 +322,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_MeleeAttack = m_Player.FindAction("Melee Attack", throwIfNotFound: true);
+        m_Player_RangeAttack = m_Player.FindAction("Range Attack", throwIfNotFound: true);
+        m_Player_AreaAttack = m_Player.FindAction("Area Attack", throwIfNotFound: true);
+        m_Player_Suicide = m_Player.FindAction("Suicide", throwIfNotFound: true);
     }
 
     ~@PlayerInputAction()
@@ -324,6 +408,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_MeleeAttack;
+    private readonly InputAction m_Player_RangeAttack;
+    private readonly InputAction m_Player_AreaAttack;
+    private readonly InputAction m_Player_Suicide;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -343,6 +431,22 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/MeleeAttack".
+        /// </summary>
+        public InputAction @MeleeAttack => m_Wrapper.m_Player_MeleeAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RangeAttack".
+        /// </summary>
+        public InputAction @RangeAttack => m_Wrapper.m_Player_RangeAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/AreaAttack".
+        /// </summary>
+        public InputAction @AreaAttack => m_Wrapper.m_Player_AreaAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Suicide".
+        /// </summary>
+        public InputAction @Suicide => m_Wrapper.m_Player_Suicide;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -375,6 +479,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @MeleeAttack.started += instance.OnMeleeAttack;
+            @MeleeAttack.performed += instance.OnMeleeAttack;
+            @MeleeAttack.canceled += instance.OnMeleeAttack;
+            @RangeAttack.started += instance.OnRangeAttack;
+            @RangeAttack.performed += instance.OnRangeAttack;
+            @RangeAttack.canceled += instance.OnRangeAttack;
+            @AreaAttack.started += instance.OnAreaAttack;
+            @AreaAttack.performed += instance.OnAreaAttack;
+            @AreaAttack.canceled += instance.OnAreaAttack;
+            @Suicide.started += instance.OnSuicide;
+            @Suicide.performed += instance.OnSuicide;
+            @Suicide.canceled += instance.OnSuicide;
         }
 
         /// <summary>
@@ -392,6 +508,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @MeleeAttack.started -= instance.OnMeleeAttack;
+            @MeleeAttack.performed -= instance.OnMeleeAttack;
+            @MeleeAttack.canceled -= instance.OnMeleeAttack;
+            @RangeAttack.started -= instance.OnRangeAttack;
+            @RangeAttack.performed -= instance.OnRangeAttack;
+            @RangeAttack.canceled -= instance.OnRangeAttack;
+            @AreaAttack.started -= instance.OnAreaAttack;
+            @AreaAttack.performed -= instance.OnAreaAttack;
+            @AreaAttack.canceled -= instance.OnAreaAttack;
+            @Suicide.started -= instance.OnSuicide;
+            @Suicide.performed -= instance.OnSuicide;
+            @Suicide.canceled -= instance.OnSuicide;
         }
 
         /// <summary>
@@ -446,5 +574,33 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Melee Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMeleeAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Range Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRangeAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Area Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAreaAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Suicide" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSuicide(InputAction.CallbackContext context);
     }
 }
