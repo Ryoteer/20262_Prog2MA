@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBehaviour : MonoBehaviour
+public class PlayerBehaviour : Entity
 {
     [Header("<color=green>Animation</color>")]
     [SerializeField] private float _smoothInputSpeed = 0.2f;
     [SerializeField] private string _xAxisName = "xAxis";
     [SerializeField] private string _yAxisName = "yAxis";
+    [SerializeField] private string _interactTriggerName = "onInteract";
     [SerializeField] private string _jumpTriggerName = "onJump";
     [SerializeField] private string _landTriggerName = "onLanding";
     [SerializeField] private string _airBoolName = "isOnAir";
@@ -20,24 +21,38 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private string _rAttackTriggerName = "onRangeAttack";
 
     [Header("<color=green>Physics</color>")]
-    [SerializeField] private float _jumpForce = 5.0f;
+    [SerializeField] private float _areaSphereRadius = 5.0f;
+    [SerializeField] private LayerMask _entityRayMask;
     [SerializeField] private float _groundRayLength = 0.125f;
     [SerializeField] private LayerMask _groundRayMask;
+    [SerializeField] private float _interactRayLength = 1.5f;
+    [SerializeField] private LayerMask _interactableRayMask;
+    [SerializeField] private float _interactSphereRadius = 0.625f;
+    [SerializeField] private float _jumpForce = 5.0f;
+    [SerializeField] private float _meleeRayLength = 1.0f;
     [SerializeField] private float _moveSpeed = 3.5f;
+    [SerializeField] private float _rangeRayLength = 30.0f;
+    [SerializeField] private float _rangeSphereRadius = 1.0f;
 
-    private bool _isAlive = true, _isOnAir = false;
+    [Header("<color=green>Stats</color>")]
+    [SerializeField] private int _damage = 20;
+
+    private bool _isOnAir = false;
 
     private Animator _animator;
     private PlayerInputAction _inputAction;
     private Rigidbody _rb;
 
     private Vector2 _rawInput = new(), _smoothInput = new(), _smoothVelocity = new();
-    private Vector3 _dir = new(), _groundRayOffset = new();
+    private Vector3 _dir = new(), _groundRayOffset = new(), _castRayOffset = new();
 
-    private Ray _groundRay;
+    private Ray _groundRay, _castRay;
+    private RaycastHit _entityHit;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _inputAction = new PlayerInputAction();
         _rb = GetComponent<Rigidbody>();
     }
@@ -52,6 +67,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _inputAction.Enable();
         _inputAction.Player.Suicide.performed += SuicideAction;
+        _inputAction.Player.Interact.performed += InteractAction;
         _inputAction.Player.Jump.performed += JumpAction;
         _inputAction.Player.AreaAttack.performed += AreaAttackAction;
         _inputAction.Player.MeleeAttack.performed += MeleeAttackAction;
@@ -63,8 +79,9 @@ public class PlayerBehaviour : MonoBehaviour
     private void OnDisable()
     {
         _inputAction.Disable();
-        _inputAction.Player.Jump.performed -= JumpAction;
         _inputAction.Player.Suicide.performed -= SuicideAction;
+        _inputAction.Player.Interact.performed -= InteractAction;
+        _inputAction.Player.Jump.performed -= JumpAction;
         _inputAction.Player.AreaAttack.performed -= AreaAttackAction;
         _inputAction.Player.MeleeAttack.performed -= MeleeAttackAction;
         _inputAction.Player.RangeAttack.performed -= RangeAttackAction;
@@ -80,6 +97,11 @@ public class PlayerBehaviour : MonoBehaviour
     private void MoveCancel(InputAction.CallbackContext value)
     {
         _rawInput = Vector2.zero;
+    }
+
+    private void InteractAction(InputAction.CallbackContext value)
+    {
+        _animator.SetTrigger(_interactTriggerName);
     }
 
     private void JumpAction(InputAction.CallbackContext value)
@@ -135,6 +157,21 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    public void Interact()
+    {
+        _castRayOffset = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z);
+
+        _castRay = new Ray(_castRayOffset, transform.forward);
+
+        if (Physics.SphereCast(_castRay, _interactSphereRadius, out _entityHit, _interactRayLength, _interactableRayMask))
+        {
+            if (_entityHit.collider.TryGetComponent(out Interactable interactable))
+            {
+                interactable.Interact();
+            }
+        }
+    }
+
     private void Jump()
     {
         if (!_isOnAir)
@@ -147,9 +184,52 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    public void AreaAttack()
+    {
+        Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _areaSphereRadius, _entityRayMask);
+
+        foreach(Collider collider in overlappedColliders)
+        {
+            if(Mathf.Abs(collider.transform.position.y - transform.position.y) <= 2.0f)
+            {
+                if (collider.TryGetComponent(out Entity entity))
+                {
+                    entity.TakeDamage(_damage * 10);
+                }
+            }
+        }
+    }
+
     public void MeleeAttack()
     {
-        Debug.Log($"<color=#7393B3>{name}</color>: Japish!");
+        _castRayOffset = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z);
+
+        _castRay = new Ray(_castRayOffset, transform.forward);
+
+        if(Physics.Raycast(_castRay, out _entityHit, _meleeRayLength, _entityRayMask))
+        {
+            if(_entityHit.collider.TryGetComponent(out Entity entity))
+            {
+                entity.TakeDamage(_damage);
+            }
+        }
+    }
+
+    public void RangeAttack()
+    {
+        _castRayOffset = new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z);
+
+        _castRay = new Ray(_castRayOffset, transform.forward);
+
+        RaycastHit[] hits = Physics.SphereCastAll(_castRay, _rangeSphereRadius, _rangeRayLength, _entityRayMask);
+
+        foreach(RaycastHit hit in hits)
+        {
+            if (hit.collider.TryGetComponent(out Entity entity))
+            {
+                entity.TakeDamage(_damage * 2);
+            }
+        }
     }
 
     private void Movement(Vector2 input)
