@@ -7,10 +7,13 @@ public class EnemyBehaviour : Entity
     [SerializeField] private string _deathTriggerName = "onDeath";
 
     private Animator _animator;
+    private PlayerBehaviour _player;
     private Rigidbody _rb;
 
     protected override void Awake()
     {
+        GameManager.Instance.Enemies.Add(this);
+
         base.Awake();
 
         _rb = GetComponent<Rigidbody>();
@@ -19,6 +22,8 @@ public class EnemyBehaviour : Entity
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();
+
+        _player = GameManager.Instance.Player;
     }
 
     public override void Death()
@@ -29,6 +34,7 @@ public class EnemyBehaviour : Entity
 
         _rb.isKinematic = true;
         _animator.SetTrigger(_deathTriggerName);
+        GameManager.Instance.OnEnemyDeath(this);
     }
 
     public override void TakeDamage(int dmg)

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,10 +9,8 @@ public class PlayerBehaviour : Entity
     [SerializeField] private string _yAxisName = "yAxis";
     [SerializeField] private string _interactTriggerName = "onInteract";
     [SerializeField] private string _jumpTriggerName = "onJump";
-    [SerializeField] private string _landTriggerName = "onLanding";
     [SerializeField] private string _airBoolName = "isOnAir";
     [SerializeField] private string _moveBoolName = "isMoving";
-    [SerializeField] private string _groundBoolName = "isGrounded";
     [SerializeField] private string _deathTriggerName = "onDeath";
     [SerializeField] private string _aAttackTriggerName = "onAreaAttack";
     [SerializeField] private string _mAttackTriggerName = "onMeleeAttack";
@@ -51,6 +47,9 @@ public class PlayerBehaviour : Entity
 
     protected override void Awake()
     {
+        GameManager.Instance.Player = this;
+        GameManager.Instance.ActualCheckpoint = transform.position;
+
         base.Awake();
 
         _inputAction = new PlayerInputAction();
@@ -184,13 +183,14 @@ public class PlayerBehaviour : Entity
         }
     }
 
+    #region Attacks
     public void AreaAttack()
     {
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _areaSphereRadius, _entityRayMask);
 
-        foreach(Collider collider in overlappedColliders)
+        foreach (Collider collider in overlappedColliders)
         {
-            if(Mathf.Abs(collider.transform.position.y - transform.position.y) <= 2.0f)
+            if (Mathf.Abs(collider.transform.position.y - transform.position.y) <= 2.0f)
             {
                 if (collider.TryGetComponent(out Entity entity))
                 {
@@ -206,9 +206,9 @@ public class PlayerBehaviour : Entity
 
         _castRay = new Ray(_castRayOffset, transform.forward);
 
-        if(Physics.Raycast(_castRay, out _entityHit, _meleeRayLength, _entityRayMask))
+        if (Physics.Raycast(_castRay, out _entityHit, _meleeRayLength, _entityRayMask))
         {
-            if(_entityHit.collider.TryGetComponent(out Entity entity))
+            if (_entityHit.collider.TryGetComponent(out Entity entity))
             {
                 entity.TakeDamage(_damage);
             }
@@ -223,7 +223,7 @@ public class PlayerBehaviour : Entity
 
         RaycastHit[] hits = Physics.SphereCastAll(_castRay, _rangeSphereRadius, _rangeRayLength, _entityRayMask);
 
-        foreach(RaycastHit hit in hits)
+        foreach (RaycastHit hit in hits)
         {
             if (hit.collider.TryGetComponent(out Entity entity))
             {
@@ -231,6 +231,7 @@ public class PlayerBehaviour : Entity
             }
         }
     }
+    #endregion
 
     private void Movement(Vector2 input)
     {
