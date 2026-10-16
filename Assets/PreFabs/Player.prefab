@@ -322,11 +322,10 @@ MonoBehaviour:
   _smoothInputSpeed: 0.2
   _xAxisName: xAxis
   _yAxisName: yAxis
+  _interactTriggerName: onInteract
   _jumpTriggerName: onJump
-  _landTriggerName: onLanding
   _airBoolName: isOnAir
   _moveBoolName: isMoving
-  _groundBoolName: isGrounded
   _deathTriggerName: onDeath
   _aAttackTriggerName: onAreaAttack
   _mAttackTriggerName: onMeleeAttack
@@ -344,7 +343,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _interactSphereRadius: 0.625
-  _jumpForce: 5
+  _jumpForce: 10
   _meleeRayLength: 1
   _moveSpeed: 5.75
   _rangeRayLength: 30

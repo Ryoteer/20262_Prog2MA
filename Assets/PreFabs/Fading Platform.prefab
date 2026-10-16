@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5473539330020989326}
   - component: {fileID: 219897592739121232}
   - component: {fileID: 7853119633440229888}
+  - component: {fileID: 6421041723187921541}
   m_Layer: 30
   m_Name: Fading Platform
   m_TagString: Untagged
@@ -69,6 +70,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fadeTimeScale: 5
   _fadeInterval: 3
+--- !u!114 &6421041723187921541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6138116134030723650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 2
+  m_OverrideGenerateLinks: 1
+  m_GenerateLinks: 1
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &7226895849939238253
 GameObject:
   m_ObjectHideFlags: 0
