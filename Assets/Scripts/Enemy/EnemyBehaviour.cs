@@ -20,7 +20,7 @@ public class EnemyBehaviour : Entity
     private Animator _animator;
     private List<Transform> _patrolNodes = new();
     private NavMeshAgent _agent;
-    private PlayerBehaviour _player;
+    private ThirdPersonModel _player;
     private Rigidbody _rb;
 
     private bool _isOnInterval = false, _isChangingPos = false;

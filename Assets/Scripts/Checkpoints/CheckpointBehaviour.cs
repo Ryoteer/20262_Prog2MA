@@ -4,7 +4,7 @@ public class CheckpointBehaviour : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<PlayerBehaviour>())
+        if (other.GetComponent<ThirdPersonModel>())
         {
             GameManager.Instance.ActualCheckpoint = transform.position;
 

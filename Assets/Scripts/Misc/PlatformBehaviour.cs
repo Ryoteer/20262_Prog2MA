@@ -24,7 +24,7 @@ public class PlatformBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<PlayerBehaviour>() && !_isActive)
+        if (collision.gameObject.GetComponent<ThirdPersonModel>() && !_isActive)
         {
             StartCoroutine(FadePlatform());
         }
