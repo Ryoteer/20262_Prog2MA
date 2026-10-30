@@ -425,6 +425,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Menu",
+            "id": "00577e5a-9c0b-41f9-8e42-2b197c1ed379",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "66fd05be-03cc-42b4-be46-d85e8e17a094",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fdfd2939-069d-43fd-aed4-beb14c365166",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("<color=green>You won!</color>");
+            LoadManager.Instance.LoadSceneAsync("MainMenu");
         }
     }
 }
