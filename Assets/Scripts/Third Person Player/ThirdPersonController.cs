@@ -23,6 +23,7 @@ public class ThirdPersonController : MonoBehaviour
         _input.Enable();
 
         _input.ThirdPersonPlayer.Jump.performed += JumpAction;
+        _input.ThirdPersonPlayer.Melee.performed += MeleeAttackAction;
         _input.ThirdPersonPlayer.Movement.performed += MovementAction;
         _input.ThirdPersonPlayer.Movement.canceled += MovementCancel;
         _input.ThirdPersonPlayer.Rotation.performed += RotationAction;
@@ -36,6 +37,7 @@ public class ThirdPersonController : MonoBehaviour
         _input.Disable();
         
         _input.ThirdPersonPlayer.Jump.performed -= JumpAction;
+        _input.ThirdPersonPlayer.Melee.performed -= MeleeAttackAction;
         _input.ThirdPersonPlayer.Movement.performed -= MovementAction;
         _input.ThirdPersonPlayer.Movement.canceled -= MovementCancel;
         _input.ThirdPersonPlayer.Rotation.performed -= RotationAction;
@@ -47,6 +49,11 @@ public class ThirdPersonController : MonoBehaviour
     private void JumpAction(InputAction.CallbackContext value)
     {
         _model.Jump();
+    }
+
+    private void MeleeAttackAction(InputAction.CallbackContext value)
+    {
+        _model.MeleeAttack();
     }
     
     private void MovementAction(InputAction.CallbackContext value)

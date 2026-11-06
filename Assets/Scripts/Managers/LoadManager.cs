@@ -64,12 +64,46 @@ public class LoadManager : MonoBehaviour
         }
     }
 
+    public void LoadSceneAdditive(string sceneName)
+    {
+        if (!_isLoading)
+        {
+            if (SceneManager.GetActiveScene().name != sceneName)
+            {
+                StartCoroutine(LoadSceneAdditiveOp(sceneName));
+            }
+            else
+            {
+                UnloadScene(sceneName);
+            }
+        }
+    }
+
     public void LoadSceneAsync(string sceneName)
     {
         if (!_isLoading)
         {
             StartCoroutine(LoadSceneAsyncOp(sceneName));
         }
+    }
+
+    public IEnumerator LoadSceneAdditiveOp(string name)
+    {
+        _isLoading = true;
+
+        float t = 0.0f;
+
+        AsyncOperation asyncOp = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+        asyncOp.allowSceneActivation = false;
+
+        while(asyncOp.progress < 0.9f)
+        {
+            yield return null;
+        }
+
+        asyncOp.allowSceneActivation = true;
+
+        _isLoading = false;
     }
 
     private IEnumerator LoadSceneAsyncOp(string sceneName)
@@ -155,5 +189,13 @@ public class LoadManager : MonoBehaviour
     private void SelectCanceled(InputAction.CallbackContext value)
     {
         _isPressed = false;
+    }
+
+    public void UnloadScene(string sceneName)
+    {
+        if(SceneManager.GetActiveScene().name == sceneName)
+        {
+            SceneManager.UnloadSceneAsync(sceneName);
+        }
     }
 }

@@ -12,6 +12,9 @@ public class ThirdPersonModel : Entity
     [SerializeField] private Transform _trackerTransform;
     public Transform TrackerTransform { get { return _trackerTransform; } }
 
+    [Header("<color=red>Gameplay</color>")]
+    [SerializeField] private int _baseDmg = 10;
+
     [Header("<color=red>Inputs</color>")]
     [Range(0.0f, 1.0f)] [SerializeField] private float _smoothInputSpeed = 0.2f;
 
@@ -19,6 +22,8 @@ public class ThirdPersonModel : Entity
     [Range(0.125f, 0.75f)] [SerializeField] private float _groundRayLength = 0.25f;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private float _jumpForce = 8.75f;
+    [SerializeField] private LayerMask _entityLayer;
+    [Range(0.125f, 0.75f)] [SerializeField] private float _meleeRayLength = 0.25f;
     [SerializeField] private float _moveSpeed = 5.0f;
     [Range(1.0f, 5.0f)][SerializeField] private float _sprintModifier = 1.375f;
 
@@ -26,12 +31,13 @@ public class ThirdPersonModel : Entity
     public bool IsSprinting { get { return _isSprinting; } set { _isSprinting = value; } }
     private float _actualSprintModifier = 1.0f;
 
-    private Ray _groundRay;
+    private Ray _groundRay, _meleeRay;
+    private RaycastHit _attackHit;
 
     private Vector2 _rawInput = new(), _smoothedInput = new(), _smoothedVelocity = new();
     public Vector2 RawInput { get { return _rawInput; } set { _rawInput = value; } }
 
-    private Vector3 _groundOffsetPos = new(), _moveDir = new(), _dirFix = new(), _cameraForwardFix = new(), _cameraRightFix = new();
+    private Vector3 _attackPosOffset = new(), _groundOffsetPos = new(), _moveDir = new(), _dirFix = new(), _cameraForwardFix = new(), _cameraRightFix = new();
     public Vector3 MoveDir { get { return _moveDir; } }
     
     private Rigidbody _rb;
@@ -104,6 +110,26 @@ public class ThirdPersonModel : Entity
         
         _view.SetJumpTrigger();
         _rb.AddForce(transform.up * _jumpForce, ForceMode.Impulse);
+    }
+
+    public void MeleeAttack()
+    {
+        _view.SetMeleeTrigger();
+    }
+
+    public void MeleeAttackBehaviour()
+    {
+        _attackPosOffset = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+
+        _meleeRay = new Ray(_attackPosOffset, transform.forward);
+
+        if(Physics.Raycast(_meleeRay, out _attackHit, _meleeRayLength, _entityLayer))
+        {
+            if(_attackHit.collider.TryGetComponent(out Entity entity))
+            {
+                entity.TakeDamage(_baseDmg);
+            }
+        }
     }
 
     private void Movement(Vector2 input)

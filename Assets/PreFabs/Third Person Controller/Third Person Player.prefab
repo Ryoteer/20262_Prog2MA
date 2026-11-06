@@ -1541,6 +1541,7 @@ GameObject:
   - component: {fileID: 513689519762181428}
   - component: {fileID: 1144377597995850469}
   - component: {fileID: 325521601126217278}
+  - component: {fileID: 1710850425490578065}
   m_Layer: 0
   m_Name: Y Bot
   m_TagString: Untagged
@@ -1604,6 +1605,122 @@ MonoBehaviour:
   _jumpTriggerName: onJump
   _xFloatName: xAxis
   _yFloatName: yAxis
+  _meleeTriggerName: onMelee
+  _attackClips:
+  - {fileID: 8300000, guid: bea03a71a8833584c94add6913eef4b8, type: 3}
+  - {fileID: 8300000, guid: 61e97d30e1cb75a45be21e4376b6c5c7, type: 3}
+  - {fileID: 8300000, guid: 5bed84fcb4ed9044f80780dc18a11f09, type: 3}
+  _jumpClips:
+  - {fileID: 8300000, guid: 1f51b578315290d47bb94ad83c63a692, type: 3}
+  - {fileID: 8300000, guid: eec1eb0d0476ecc4e8d44a68e2ae033f, type: 3}
+  _movementClips:
+  - {fileID: 8300000, guid: c16309633f80251428b661d376383597, type: 3}
+  - {fileID: 8300000, guid: 7a409ec5ec06acf4d8d1247e3ecbc795, type: 3}
+  - {fileID: 8300000, guid: b4ef8f7441399c04f90e77845fa24fc6, type: 3}
+  - {fileID: 8300000, guid: c42feaf5519ba7943b8197b50b743f78, type: 3}
+  - {fileID: 8300000, guid: 543a71261e60bf94c896e595da533cf0, type: 3}
+  - {fileID: 8300000, guid: c4ce5dd7868927e41b6fc46855e8747a, type: 3}
+  - {fileID: 8300000, guid: 99ab550095508e140989101f0e6f07aa, type: 3}
+  - {fileID: 8300000, guid: 7e4fbb44a59f1bc4d98822095e0117f1, type: 3}
+  - {fileID: 8300000, guid: c5bf23150228fc24198476a9e60b7ac3, type: 3}
+  - {fileID: 8300000, guid: cd84dde1724c2e0419694ebdde379df3, type: 3}
+--- !u!82 &1710850425490578065
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4902648355437429833}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4993599017297415518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1969,13 +2086,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a55f92331803cab4cbe2f51bdb7fc0e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxHP: 100
   _trackerTransform: {fileID: 3383236933584688416}
+  _baseDmg: 10
   _smoothInputSpeed: 0.2
   _groundRayLength: 0.25
   _groundLayer:
     serializedVersion: 2
     m_Bits: 1073741824
   _jumpForce: 8.75
+  _entityLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _meleeRayLength: 0.25
   _moveSpeed: 5
   _sprintModifier: 2.5
 --- !u!1 &6849796778795133309
